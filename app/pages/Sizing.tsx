@@ -1,15 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Chart, registerables } from "chart.js";
-import {
-  FaServer,
-  FaMemory,
-  FaNetworkWired,
-  FaShieldAlt,
-  FaForward,
-} from "react-icons/fa";
-import Aside from "@/app/components/Aside/Aside";
+import { useState, useRef } from "react";
+import { Chart, registerables } from "chart.js"; 
+import Aside from "@/app/components/Aside/Aside"; // Verifique se o caminho está correto
 
 Chart.register(...registerables);
 
@@ -112,34 +105,32 @@ const Sizing = () => {
 
     // Cria o gráfico após o cálculo
     if (chartRef.current) {
-      const ctx = chartRef.current.getContext("2d");
-      if (ctx) {
-        const myChart = new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels: ["Memória Total (GB)", "CPU Total (vCPU)", "Nós Necessários"],
-            datasets: [
-              {
-                label: "Resultados de Sizing",
-                data: [result.totalMemory, result.totalCPU, result.nodesNeeded],
-                backgroundColor: ["#EE0000", "#FFDD00", "#FF3333"], // Cores Red Hat
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'top',
-              },
-              title: {
-                display: true,
-                text: 'Resultados do Sizing',
-              },
+      new Chart(chartRef.current, {
+        type: "bar",
+        data: {
+          labels: ["Memória Total (GB)", "CPU Total (vCPU)", "Nós Necessários"],
+          datasets: [
+            {
+              label: "Resultados de Sizing",
+              data: [result.totalMemory, result.totalCPU, result.nodesNeeded],
+              backgroundColor: ["#EE0000", "#FFDD00", "#FF3333"], // Cores Red Hat
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Resultados de Sizing',
             },
           },
-        });
-      }
+        },
+      });
     }
   };
 
@@ -176,7 +167,6 @@ const Sizing = () => {
               className="grid grid-cols-1 md:grid-cols-2 gap-6"
               onSubmit={handleSubmit}
             >
-              {/* Form Fields */}
               <div>
                 <label className="block mb-1 text-sm font-medium">Nome do Cliente</label>
                 <input
@@ -289,45 +279,34 @@ const Sizing = () => {
               </div>
               <button
                 type="submit"
-                className="col-span-1 md:col-span-2 bg-red-600 text-white py-2 rounded hover:bg-red-700"
+                className="mt-4 bg-blue-600 text-white p-2 rounded"
               >
                 Calcular
               </button>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="mt-4 bg-gray-400 text-white p-2 rounded"
+              >
+                Resetar
+              </button>
             </form>
           ) : (
-            <div className="bg-white shadow-lg rounded p-6">
-              <h3 className="text-xl font-bold text-gray-700 mb-4">
-                Resultados do Sizing
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="bg-red-50 p-4 rounded border border-red-200">
-                  <FaMemory className="text-red-600 mb-2" />
-                  <h4 className="font-semibold">Memória Total:</h4>
-                  <p>{sizingResult?.totalMemory} GB</p>
+            <div className="mt-6">
+              <h3 className="text-2xl font-bold">Resultados de Sizing</h3>
+              {sizingResult && (
+                <div className="mt-4">
+                  <p><strong>Nome do Cliente:</strong> {sizingResult.clientName}</p>
+                  <p><strong>Total de Memória (GB):</strong> {sizingResult.totalMemory}</p>
+                  <p><strong>Total de CPU (vCPU):</strong> {sizingResult.totalCPU}</p>
+                  <p><strong>Nós Necessários:</strong> {sizingResult.nodesNeeded}</p>
+                  <p><strong>Armazenamento Necessário (GB):</strong> {sizingResult.storageNeeded}</p>
+                  <p><strong>Tipo de Infraestrutura:</strong> {sizingResult.infrastructureType}</p>
+                  <p><strong>Alta Disponibilidade:</strong> {sizingResult.highAvailability}</p>
+                  <p><strong>Crescimento Futuro (%):</strong> {sizingResult.futureGrowth}</p>
                 </div>
-                <div className="bg-red-50 p-4 rounded border border-red-200">
-                  <FaForward className="text-red-600 mb-2" />
-                  <h4 className="font-semibold">CPU Total:</h4>
-                  <p>{sizingResult?.totalCPU} vCPU</p>
-                </div>
-                <div className="bg-red-50 p-4 rounded border border-red-200">
-                  <FaServer className="text-red-600 mb-2" />
-                  <h4 className="font-semibold">Nós Necessários:</h4>
-                  <p>{sizingResult?.nodesNeeded}</p>
-                </div>
-                <div className="bg-red-50 p-4 rounded border border-red-200">
-                  <FaNetworkWired className="text-red-600 mb-2" />
-                  <h4 className="font-semibold">Armazenamento Necessário:</h4>
-                  <p>{sizingResult?.storageNeeded} GB</p>
-                </div>
-              </div>
-              <canvas ref={chartRef} width={400} height={200} />
-              <button
-                onClick={handleReset}
-                className="mt-4 bg-gray-500 text-white py-2 rounded hover:bg-gray-600"
-              >
-                Voltar
-              </button>
+              )}
+              <canvas ref={chartRef} className="mt-6"></canvas>
             </div>
           )}
         </main>

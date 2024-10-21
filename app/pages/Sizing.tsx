@@ -153,7 +153,7 @@ const Sizing = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <Aside activeTab="dashboard" />
+      <Aside/>
 
       <div className="flex-1">
         <header className="bg-zinc-900 p-4 h-20"></header>
@@ -279,34 +279,34 @@ const Sizing = () => {
               </div>
               <button
                 type="submit"
-                className="mt-4 bg-blue-600 text-white p-2 rounded"
+                className="mt-4 bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
               >
                 Calcular
               </button>
               <button
                 type="button"
                 onClick={handleReset}
-                className="mt-4 bg-gray-400 text-white p-2 rounded"
+                className="mt-4 bg-gray-500 text-white p-2 rounded hover:bg-gray-600"
               >
                 Resetar
               </button>
             </form>
           ) : (
             <div className="mt-6">
-              <h3 className="text-2xl font-bold">Resultados de Sizing</h3>
+              <h3 className="text-2xl font-bold text-gray-700 mb-4">Resultados</h3>
               {sizingResult && (
-                <div className="mt-4">
+                <div className="bg-white shadow rounded p-4">
                   <p><strong>Nome do Cliente:</strong> {sizingResult.clientName}</p>
-                  <p><strong>Total de Memória (GB):</strong> {sizingResult.totalMemory}</p>
-                  <p><strong>Total de CPU (vCPU):</strong> {sizingResult.totalCPU}</p>
+                  <p><strong>Memória Total Necessária:</strong> {sizingResult.totalMemory} GB</p>
+                  <p><strong>CPU Total Necessária:</strong> {sizingResult.totalCPU} vCPU</p>
                   <p><strong>Nós Necessários:</strong> {sizingResult.nodesNeeded}</p>
-                  <p><strong>Armazenamento Necessário (GB):</strong> {sizingResult.storageNeeded}</p>
+                  <p><strong>Armazenamento Necessário:</strong> {sizingResult.storageNeeded} GB</p>
                   <p><strong>Tipo de Infraestrutura:</strong> {sizingResult.infrastructureType}</p>
                   <p><strong>Alta Disponibilidade:</strong> {sizingResult.highAvailability}</p>
                   <p><strong>Crescimento Futuro (%):</strong> {sizingResult.futureGrowth}</p>
                 </div>
               )}
-              <canvas ref={chartRef} className="mt-6"></canvas>
+              <canvas ref={chartRef} className="mt-4"></canvas>
             </div>
           )}
         </main>
